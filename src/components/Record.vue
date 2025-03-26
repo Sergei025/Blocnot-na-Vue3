@@ -1,63 +1,37 @@
 <template>
-      <ul v-if="visible1">
-        <li v-for="(item) in decury" @dblclick="editItems" @click="redacte(item)">
+    <li @dblclick="editItems" @click="redacte(item)">
 
-          <span v-if="!item.isEditing" >{{ item.title }}</span>
-          <input v-if="item.isEditing" v-model="item.title" class="input" @blur="finishEditing" 
-          @keyup.enter="finishEditing"/>
+      <span v-if="!item.isEditing">{{ item.title }}</span>
+      <input v-if="item.isEditing" v-model="item.title" class="input" @blur="finishEditing" 
+      @keyup.enter="finishEditing" />
 
-          <a @click.stop="remove(item)">&#10006;</a>
-        </li>
-      </ul>
-      <ul v-if="visible2">
-        <li v-for="(item) in items" @dblclick="editItems(item)" @click="redacte(item)">
-          <span v-if="!item.isEditing" >{{ item.title }}</span>
-          <input v-if="item.isEditing" v-model="item.title" class="input" @blur="finishEditing" 
-          @keyup.enter="finishEditing"/>
-
-          <a @click.stop="remove(item)">&#10006;</a>
-        </li>
-      </ul>
+      <a @click.stop="remove(item)">&#10006;</a>
+    </li>
 </template>
 
 <script>
 export default {
-    props: {
-        editItems: {
-            type: Function,
-            required: true
-        },
-        redacte: {
-            type: Function,
-            required: true
-        },
-        finishEditing: {
-            type: Function,
-            required: true
-        },
-        remove: {
-            type: Function,
-            required: true
-        },
-        visible1: {
-          type: Boolean,
-          required: true
-        },
-        visible2: {
-          type: Boolean,
-          required: true
-        },
-        items: {
-            type: Array,
-            required: true
-        },
-        decury: {
-          type: Array,
-          required: true
-        }
-    }
-}
+  props: {
+    item: Object,  // Пропс для передачи объекта item
+  },
+  emits: ['edit-item', 'redact-item', 'finish-editing', 'remove-item'],  // Указываем события
+  methods: {
+    editItems() {
+      this.$emit('edit-item'); // Эмитим событие редактирования
+    },
+    redacte(item) {
+      this.$emit('redact-item', item); // Эмитим событие редактирования контента
+    },
+    finishEditing() {
+      this.$emit('finish-editing'); // Эмитим событие завершения редактирования
+    },
+    remove(item) {
+      this.$emit('remove-item', item); // Эмитим событие удаления элемента
+    },
+  },
+};
 </script>
+
 
 <style scoped>
 .input {
@@ -65,14 +39,6 @@ export default {
   height: 20px;
   font-size: 17px;
   font-family: Arial, Helvetica, sans-serif;
-}
-ul {
-  width: 220px;
-  margin-top: 15px;
-  font-family: Arial, Helvetica, sans-serif;
-  list-style-type: none;
-  font-size: 17px;
-  padding: 0;
 }
 li {
   width: 100%;

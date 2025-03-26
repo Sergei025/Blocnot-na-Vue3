@@ -3,9 +3,26 @@
     <div class="menu">
       <h2>Меню записей</h2>
       <input v-if="pokaz" v-model="searchQuery" @input="filterItems" class="type" placeholder="Поиск...">
-
-      <Record :visible2="visible2" :visible1="visible1" :items="items" :decury="decury" :editItems="editItems" :redacte="redacte" :finishEditing="finishEditing" :remove="remove" />
-      
+      <ul v-if="visible1">
+      <Record  
+        v-for="(item) in decury"
+        :item="item"
+        @edit-item="handleEditItem"
+        @redact-item="handleRedactItem"
+        @finish-editing="handleFinishEditing"
+        @remove-item="handleRemoveItem"
+      />
+      </ul>
+      <ul v-if="visible2">
+        <Record  
+        v-for="(item) in items"
+        :item="item"
+        @edit-item="handleEditItem"
+        @redact-item="handleRedactItem"
+        @finish-editing="handleFinishEditing"
+        @remove-item="handleRemoveItem"
+      />
+      </ul>
       <p v-if="items.length > 0">Нажмите на пункт списка чтобы посмотреть или отредактировать его текст</p>
       <p v-if="items.length > 0">Нажмите два раза на пункт списка чтобы отредактировать его название</p>
 
@@ -60,11 +77,11 @@ export default {
         this.items.push(newNote);
       }
     },
-    redacte(item) {
+    handleRedactItem(item) {
       this.newItem = item.content;
       this.currentItem = item;
     },
-    remove(item) {
+    handleRemoveItem(item) {
       // Ищем элемент по id
       const itemIndex = this.items.findIndex(i => i.id === item.id);
       if (itemIndex !== -1) {
@@ -90,10 +107,10 @@ export default {
         return this.items;
       }
     },
-    editItems() {
+    handleEditItem() {
       this.currentItem.isEditing = true;
     },
-    finishEditing() {
+    handleFinishEditing() {
       this.currentItem.isEditing = false;
     }
   }
@@ -132,7 +149,14 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 17px;
 }
-
+ul {
+  width: 220px;
+  margin-top: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  list-style-type: none;
+  font-size: 17px;
+  padding: 0;
+}
 p {
   margin-top: 10px;
   font-family: Arial, Helvetica, sans-serif;
